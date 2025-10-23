@@ -1,108 +1,9 @@
+
 import React, { useState } from 'react';
+import { chairData, imageUrls } from './chairData';
 
 const NanamiWebsite = () => {
   const [selectedChair, setSelectedChair] = useState(null);
-
-  const chairData = {
-    premium: {
-      name: 'Premium',
-      price: 'PHP 145,000',
-      image: 'images/premium.png',
-      features: [
-        'Advanced SL track system',
-        '15 auto massage programs',
-        'Heat therapy',
-        'Zero gravity position',
-        'Air compression massage',
-        'Bluetooth speakers',
-        'USB charging port',
-        'Space-saving design'
-      ]
-    },
-    premiumplus: {
-      name: 'Premium Plus',
-      price: 'PHP 150,000',
-      image: 'images/premium plus.png',
-      features: [
-        'Enhanced SL track system',
-        '18 auto massage programs',
-        'Advanced heat therapy',
-        'Zero gravity position',
-        'Full body air compression',
-        'Premium Bluetooth speakers',
-        'Dual USB charging ports',
-        'Space-saving design',
-        'Foot roller massage'
-      ]
-    },
-    executive: {
-      name: 'Executive',
-      price: 'PHP 155,000',
-      image: 'images/executive.png',
-      features: [
-        'Longest SL track in the market',
-        '20 auto massage programs',
-        'AI',
-        'Whole body hot compress',
-        'Electric leg extension with sensing',
-        'Massage customizations',
-        'Body Scanning System',
-        'Voice Control',
-        '2-way phone charging system'
-      ]
-    },
-    luxury: {
-      name: 'Elite',
-      price: 'PHP 165,000',
-      image: 'images/luxury.png',
-      features: [
-        'Premium leather upholstery',
-        '25 auto massage programs',
-        'Advanced AI detection',
-        'Full body heating system',
-        'Foot roller massage',
-        'Customizable programs',
-        '4D massage mechanism',
-        'Smart voice control',
-        'Wireless charging pad'
-      ]
-    },
-    elitepro: {
-      name: 'Elite Pro',
-      price: 'PHP 175,000',
-      image: 'images/elite pro.png',
-      features: [
-        'Premium Italian leather',
-        '30 auto massage programs',
-        'AI with learning capability',
-        'Full body heating & cooling',
-        'Advanced foot roller massage',
-        'Fully customizable programs',
-        '5D massage mechanism',
-        'Advanced voice control',
-        'Wireless charging pad',
-        'Aromatherapy system'
-      ]
-    },
-    luxury1: {
-      name: 'Luxury',
-      price: 'PHP 185,000',
-      image: 'images/luxury1.png',
-      features: [
-        'Top-grain leather upholstery',
-        '35 auto massage programs',
-        'Advanced AI with memory',
-        'Climate control system',
-        'Premium foot & calf massage',
-        'Personalized massage profiles',
-        '6D massage mechanism',
-        'Multi-language voice control',
-        'Wireless phone charging',
-        'Built-in aromatherapy',
-        'Ambient lighting system'
-      ]
-    }
-  };
 
   const showChairDetails = (chairType) => {
     setSelectedChair(chairData[chairType]);
@@ -110,6 +11,9 @@ const NanamiWebsite = () => {
       document.querySelector('.chair-detail')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   };
+
+  const heroBackground = imageUrls.hero ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${imageUrls.hero}) center/cover` : '#333';
+  const aboutBackground = imageUrls.blackchair ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${imageUrls.blackchair}) center/cover` : '#1f2937';
 
   return (
     <div className="min-h-screen bg-white">
@@ -174,15 +78,6 @@ const NanamiWebsite = () => {
         .logo-text-bottom {
           font-size: 10px;
           color: #666;
-        }
-        
-        .hero {
-          height: 100vh;
-          background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-              url('images/chairs.jpg') center/cover;
-          display: flex;
-          align-items: center;
-          padding: 2rem;
         }
         
         .hero-content {
@@ -448,15 +343,6 @@ const NanamiWebsite = () => {
           background: #dc2626;
         }
         
-        .about {
-          min-height: 100vh;
-          background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                      url('images/blackchair.jpg') center/cover;
-          display: flex;
-          align-items: center;
-          padding: 5rem 2rem;
-        }
-        
         .about-container {
           max-width: 1200px;
           margin: 0 auto;
@@ -594,7 +480,7 @@ const NanamiWebsite = () => {
         <div className="nav-container">
           <div className="logo">
             <div className="logo-icon">
-              <img src="images/logo.png" alt="Nanami Logo" />
+              <img src={imageUrls.logo} alt="Nanami Logo" />
             </div>
             <div className="logo-text">
               <div className="logo-text-top">NANAMI MASSAGE</div>
@@ -605,7 +491,13 @@ const NanamiWebsite = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="hero">
+      <section style={{
+        height: '100vh',
+        background: heroBackground,
+        display: 'flex',
+        alignItems: 'center',
+        padding: '2rem'
+      }}>
         <div className="hero-content">
           <div className="hero-box">
             <h1>State-of-the-art<br/>massage chairs</h1>
@@ -622,47 +514,14 @@ const NanamiWebsite = () => {
         <p className="section-subtitle">Available units:</p>
         
         <div className="chairs-grid">
-          <div className="chair-card" onClick={() => showChairDetails('premium')}>
-            <div className="chair-image-container">
-              <img src="images/premium.png" alt="Premium" className="chair-image" />
+          {Object.keys(chairData).slice(0, 6).map((key) => (
+            <div key={key} className="chair-card" onClick={() => showChairDetails(key)}>
+              <div className="chair-image-container">
+                <img src={chairData[key].imageUrl} alt={chairData[key].name} className="chair-image" />
+              </div>
+              <p className="chair-name">{chairData[key].name}</p>
             </div>
-            <p className="chair-name">Premium</p>
-          </div>
-          
-          <div className="chair-card" onClick={() => showChairDetails('executive')}>
-            <div className="chair-image-container">
-              <img src="images/executive.png" alt="Executive" className="chair-image" />
-            </div>
-            <p className="chair-name">Executive</p>
-          </div>
-          
-          <div className="chair-card" onClick={() => showChairDetails('luxury')}>
-            <div className="chair-image-container">
-              <img src="images/luxury.png" alt="Elite" className="chair-image" />
-            </div>
-            <p className="chair-name">Elite</p>
-          </div>
-          
-          <div className="chair-card" onClick={() => showChairDetails('premiumplus')}>
-            <div className="chair-image-container">
-              <img src="images/premium plus.png" alt="Premium Plus" className="chair-image" />
-            </div>
-            <p className="chair-name">Premium Plus</p>
-          </div>
-          
-          <div className="chair-card" onClick={() => showChairDetails('luxury1')}>
-            <div className="chair-image-container">
-              <img src="images/luxury1.png" alt="Luxury" className="chair-image" />
-            </div>
-            <p className="chair-name">Luxury</p>
-          </div>
-          
-          <div className="chair-card" onClick={() => showChairDetails('elitepro')}>
-            <div className="chair-image-container">
-              <img src="images/elite pro.png" alt="Elite Pro" className="chair-image" />
-            </div>
-            <p className="chair-name">Elite Pro</p>
-          </div>
+          ))}
         </div>
         
         <div className="dots">
@@ -677,7 +536,7 @@ const NanamiWebsite = () => {
         <div className="chair-detail-container">
           {selectedChair ? (
             <>
-              <img src={selectedChair.image} alt={selectedChair.name} className="chair-detail-image" />
+              <img src={selectedChair.imageUrl} alt={selectedChair.name} className="chair-detail-image" />
               <h2>{selectedChair.name}</h2>
               <div className="price">{selectedChair.price}</div>
               <div className="features">
@@ -711,6 +570,7 @@ const NanamiWebsite = () => {
             allowFullScreen="" 
             loading="lazy" 
             referrerPolicy="no-referrer-when-downgrade"
+            title="Koronadal Branch Map"
           />
         </div>
         
@@ -720,6 +580,7 @@ const NanamiWebsite = () => {
             allowFullScreen="" 
             loading="lazy" 
             referrerPolicy="no-referrer-when-downgrade"
+            title="Davao Branch Map"
           />
         </div>
         <div className="location-card location-dark">
@@ -731,7 +592,13 @@ const NanamiWebsite = () => {
       </section>
 
       {/* About */}
-      <section className="about">
+      <section style={{
+        minHeight: '100vh',
+        background: aboutBackground,
+        display: 'flex',
+        alignItems: 'center',
+        padding: '5rem 2rem'
+      }} className="about">
         <div className="about-container">
           <h2>About the company</h2>
           <div className="about-grid">
@@ -778,7 +645,7 @@ const NanamiWebsite = () => {
           
           <div className="contact-logo">
             <div className="logo-circle">
-              <img src="images/logo.png" alt="Nanami Logo" />
+              <img src={imageUrls.logo} alt="Nanami Logo" />
             </div>
             <div className="company-name">NANAMI</div>
           </div>
@@ -789,3 +656,7 @@ const NanamiWebsite = () => {
 };
 
 export default NanamiWebsite;
+
+
+
+
