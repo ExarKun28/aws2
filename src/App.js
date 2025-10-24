@@ -1,9 +1,41 @@
-
-import React, { useState } from 'react';
-import { chairData, imageUrls } from './chairData';
+import React, { useState, useEffect } from 'react';
+import { imageUrls } from './chairData.js';
 
 const NanamiWebsite = () => {
   const [selectedChair, setSelectedChair] = useState(null);
+  const [chairData, setChairData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch chairs from API
+  useEffect(() => {
+    const fetchChairs = async () => {
+      try {
+        const response = await fetch('https://6up3q0a4gh.execute-api.ap-southeast-2.amazonaws.com/default/GetMassageChairs');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch chairs');
+        }
+        
+        const data = await response.json();
+        
+        // Convert array to object format matching original structure
+        const chairsObject = {};
+        data.forEach(chair => {
+          chairsObject[chair.chairId] = chair;
+        });
+        
+        setChairData(chairsObject);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching chairs:', err);
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchChairs();
+  }, []);
 
   const showChairDetails = (chairType) => {
     setSelectedChair(chairData[chairType]);
@@ -12,651 +44,465 @@ const NanamiWebsite = () => {
     }, 100);
   };
 
-  const heroBackground = imageUrls.hero ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${imageUrls.hero}) center/cover` : '#333';
-  const aboutBackground = imageUrls.blackchair ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${imageUrls.blackchair}) center/cover` : '#1f2937';
+  const heroBackground = imageUrls.hero ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${imageUrls.hero})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+  const aboutBackground = imageUrls.blackchair ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${imageUrls.blackchair})` : 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
+
+  if (loading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        fontSize: '24px',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Canterra'
+      }}>
+        Loading massage chairs...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        fontSize: '24px',
+        color: 'red',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Canterra'
+      }}>
+        Error loading chairs: {error}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
-      <style>{`
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-        
-        body {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-          line-height: 1.6;
-          color: #333;
-        }
-        
-        nav {
-          background: white;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-          position: sticky;
-          top: 0;
-          z-index: 1000;
-          padding: 1rem 2rem;
-        }
-        
-        .nav-container {
-          max-width: 1200px;
-          margin: 0 auto;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-        
-        .logo {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-        
-        .logo-icon {
-          width: 40px;
-          height: 40px;
-        }
-        
-        .logo-icon img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
-        
-        .logo-text {
-          display: flex;
-          flex-direction: column;
-        }
-        
-        .logo-text-top {
-          font-size: 14px;
-          font-weight: bold;
-          color: #333;
-        }
-        
-        .logo-text-bottom {
-          font-size: 10px;
-          color: #666;
-        }
-        
-        .hero-content {
-          max-width: 1200px;
-          margin: 0 auto;
-          width: 100%;
-        }
-        
-        .hero-box {
-          background: rgba(31, 41, 55, 0.95);
-          padding: 3rem 4rem;
-          max-width: 600px;
-        }
-        
-        .hero-box h1 {
-          font-size: 3rem;
-          color: #ef4444;
-          margin-bottom: 1.5rem;
-          line-height: 1.2;
-        }
-        
-        .hero-box p {
-          font-size: 1.25rem;
-          color: white;
-          margin-bottom: 2rem;
-        }
-        
-        .btn {
-          display: inline-block;
-          padding: 1rem 2.5rem;
-          background: white;
-          color: #333;
-          text-decoration: none;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          transition: all 0.3s;
-          cursor: pointer;
-          border: none;
-        }
-        
-        .btn:hover {
-          background: #f3f4f6;
-        }
-        
-        .chairs-section {
-          padding: 5rem 2rem;
-          background: white;
-        }
-        
-        .section-title {
-          text-align: center;
-          font-size: 2.5rem;
-          color: #333;
-          margin-bottom: 0.5rem;
-        }
-        
-        .section-subtitle {
-          text-align: center;
-          color: #666;
-          margin-bottom: 3rem;
-        }
-        
-        .chairs-grid {
-          max-width: 1200px;
-          margin: 0 auto;
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 3rem;
-        }
-        
-        .chair-card {
-          text-align: center;
-          cursor: pointer;
-          transition: transform 0.3s;
-        }
-        
-        .chair-card:hover {
-          transform: scale(1.05);
-        }
-        
-        .chair-image-container {
-          position: relative;
-          margin-bottom: 1rem;
-        }
-        
-        .chair-image {
-          position: relative;
-          z-index: 2;
-          width: 100%;
-          height: 200px;
-          object-fit: contain;
-        }
-        
-        .chair-name {
-          color: #333;
-          font-size: 1rem;
-        }
-        
-        .dots {
-          display: flex;
-          justify-content: center;
-          gap: 0.5rem;
-          margin-top: 2rem;
-        }
-        
-        .dot {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background: #d1d5db;
-        }
-        
-        .dot.active {
-          background: #4b5563;
-        }
-        
-        .chair-detail {
-          background: linear-gradient(135deg, #f97316, #ef4444);
-          padding: 5rem 2rem;
-          color: white;
-          min-height: 400px;
-        }
-        
-        .chair-detail-container {
-          max-width: 900px;
-          margin: 0 auto;
-          text-align: center;
-        }
-        
-        .chair-detail-image {
-          width: 300px;
-          height: 400px;
-          margin: 0 auto 2rem;
-          object-fit: contain;
-        }
-        
-        .chair-detail h2 {
-          font-size: 2.5rem;
-          margin-bottom: 0.5rem;
-        }
-        
-        .price {
-          font-size: 3rem;
-          font-weight: bold;
-          margin-bottom: 2rem;
-        }
-        
-        .features {
-          text-align: left;
-          max-width: 600px;
-          margin: 0 auto 2rem;
-        }
-        
-        .features h3 {
-          font-size: 1.25rem;
-          margin-bottom: 1rem;
-        }
-        
-        .features ul {
-          list-style: none;
-        }
-        
-        .features li {
-          margin-bottom: 0.5rem;
-          padding-left: 1.5rem;
-          position: relative;
-        }
-        
-        .features li:before {
-          content: "•";
-          position: absolute;
-          left: 0;
-        }
-        
-        .availability {
-          border-top: 1px solid rgba(255,255,255,0.3);
-          padding-top: 1.5rem;
-          margin-top: 2rem;
-        }
-        
-        .availability-label {
-          font-size: 0.875rem;
-          font-weight: bold;
-          letter-spacing: 2px;
-          margin-bottom: 0.5rem;
-        }
-        
-        .availability-text {
-          font-size: 1.125rem;
-        }
-        
-        .locations {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-        }
-        
-        .location-card {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          min-height: 500px;
-          padding: 3rem;
-          text-align: center;
-        }
-        
-        .location-red {
-          background: #ef4444;
-          color: white;
-        }
-        
-        .location-dark {
-          background: #1f2937;
-          color: white;
-        }
-        
-        .location-map {
-          background: #cbd5e1;
-          padding: 0;
-          overflow: hidden;
-          position: relative;
-        }
-        
-        .location-map iframe {
-          width: 100%;
-          height: 100%;
-          min-height: 500px;
-          border: none;
-          display: block;
-        }
-        
-        .location-card h2 {
-          font-size: 3.5rem;
-          margin-bottom: 2rem;
-          line-height: 1.2;
-        }
-        
-        .location-btn {
-          padding: 1rem 2.5rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          border: none;
-          cursor: pointer;
-          transition: all 0.3s;
-        }
-        
-        .btn-dark {
-          background: #1f2937;
-          color: white;
-        }
-        
-        .btn-dark:hover {
-          background: #374151;
-        }
-        
-        .btn-red {
-          background: #ef4444;
-          color: white;
-        }
-        
-        .btn-red:hover {
-          background: #dc2626;
-        }
-        
-        .about-container {
-          max-width: 1200px;
-          margin: 0 auto;
-          width: 100%;
-        }
-        
-        .about h2 {
-          text-align: center;
-          font-size: 3rem;
-          color: white;
-          margin-bottom: 4rem;
-        }
-        
-        .about-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 2rem;
-        }
-        
-        .about-box {
-          background: white;
-          padding: 3rem;
-          line-height: 1.8;
-        }
-        
-        .about-box-purple {
-          background: #f3e8ff;
-        }
-        
-        .contact {
-          min-height: 100vh;
-          background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), #1f2937;
-          display: flex;
-          align-items: center;
-          padding: 5rem 2rem;
-        }
-        
-        .contact-container {
-          max-width: 1200px;
-          margin: 0 auto;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 4rem;
-          align-items: center;
-        }
-        
-        .contact-info {
-          color: white;
-        }
-        
-        .contact-info h2 {
-          font-size: 3.5rem;
-          color: #ef4444;
-          margin-bottom: 3rem;
-        }
-        
-        .contact-details {
-          margin-bottom: 3rem;
-        }
-        
-        .contact-section {
-          margin-bottom: 2rem;
-        }
-        
-        .contact-section h3 {
-          font-size: 1.25rem;
-          margin-bottom: 0.5rem;
-        }
-        
-        .contact-section p {
-          color: #d1d5db;
-        }
-        
-        .accessibility {
-          font-size: 0.875rem;
-          color: #9ca3af;
-          margin-top: 1.5rem;
-        }
-        
-        .contact-logo {
-          background: white;
-          padding: 3rem;
-          text-align: center;
-          border-radius: 8px;
-        }
-        
-        .logo-circle {
-          width: 300px;
-          height: 300px;
-          margin: 0 auto 1.5rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: white;
-        }
-        
-        .logo-circle img {
-          width: 80%;
-          height: 80%;
-          object-fit: contain;
-        }
-        
-        .company-name {
-          font-size: 2rem;
-          font-weight: bold;
-          letter-spacing: 3px;
-          color: #1f2937;
-        }
-        
-        @media (max-width: 768px) {
-          .hero-box h1 {
-            font-size: 2rem;
+      <style>
+        {`
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
           }
-          
-          .chairs-grid {
-            grid-template-columns: 1fr;
-          }
-          
-          .locations {
-            grid-template-columns: 1fr;
-          }
-          
-          .contact-container {
-            grid-template-columns: 1fr;
-          }
-          
-          .about-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
 
-      {/* Navigation */}
-      <nav>
-        <div className="nav-container">
-          <div className="logo">
-            <div className="logo-icon">
-              <img src={imageUrls.logo} alt="Nanami Logo" />
-            </div>
-            <div className="logo-text">
-              <div className="logo-text-top">NANAMI MASSAGE</div>
-              <div className="logo-text-bottom">CHAIR</div>
-            </div>
-          </div>
-        </div>
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Canterra, "Open Sans", "Helvetica Neue", sans-serif;
+          }
+
+          .hero-section {
+            background: ${heroBackground};
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+          }
+
+          .hero-content {
+            max-width: 800px;
+            padding: 2rem;
+            animation: fadeInUp 1s ease-out;
+          }
+
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+          }
+
+          .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+          }
+
+          .cta-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+          }
+
+          .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+          }
+
+          .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+          }
+
+          .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #333;
+          }
+
+          .chairs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+          }
+
+          .chair-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+          }
+
+          .chair-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+          }
+
+          .chair-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+          }
+
+          .chair-info {
+            padding: 1.5rem;
+          }
+
+          .chair-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #333;
+          }
+
+          .chair-price {
+            font-size: 1.3rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 1rem;
+          }
+
+          .chair-features {
+            list-style: none;
+            padding: 0;
+          }
+
+          .chair-features li {
+            padding: 0.3rem 0;
+            color: #666;
+            display: flex;
+            align-items: center;
+          }
+
+          .chair-features li:before {
+            content: "✓";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 0.5rem;
+          }
+
+          .about-section {
+            background: ${aboutBackground};
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            padding: 5rem 2rem;
+          }
+
+          .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+          }
+
+          .contact-section {
+            background: #f8f9fa;
+          }
+
+          .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+          }
+
+          .form-group {
+            margin-bottom: 1.5rem;
+          }
+
+          .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+          }
+
+          .form-group input,
+          .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+          }
+
+          .form-group input:focus,
+          .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+          }
+
+          .submit-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+          }
+
+          .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+          }
+
+          .chair-detail {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            margin-top: 2rem;
+            border-radius: 15px;
+            animation: slideIn 0.5s ease-out;
+          }
+
+          @keyframes slideIn {
+            from {
+              opacity: 0;
+              transform: translateX(-20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateX(0);
+            }
+          }
+
+          .detail-content {
+            max-width: 800px;
+            margin: 0 auto;
+          }
+
+          .detail-content h2,
+          .detail-content h3,
+          .detail-content h4 {
+            color: white;
+            text-align: center;
+          }
+
+          .detail-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+          }
+
+          .detail-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+          }
+
+          .detail-content h4 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+          }
+
+          .detail-content ul {
+            max-width: 600px;
+            margin: 0 auto;
+          }
+
+          .detail-content .chair-features li {
+            color: white;
+            padding: 0.5rem 0;
+            font-size: 1.1rem;
+          }
+
+          .detail-content .chair-features li:before {
+            color: white;
+          }
+
+          .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+
+          .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+          }
+
+          .nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+          }
+
+          .nav-links a:hover {
+            color: #667eea;
+          }
+
+          .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+        `}
+      </style>
+
+      <nav className="navbar">
+        <div className="logo">NANAMI</div>
+        <ul className="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#chairs">Chairs</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
       </nav>
 
-      {/* Hero Section */}
-      <section style={{
-        height: '100vh',
-        background: heroBackground,
-        display: 'flex',
-        alignItems: 'center',
-        padding: '2rem'
-      }}>
+      <section id="home" className="hero-section">
         <div className="hero-content">
-          <div className="hero-box">
-            <h1>State-of-the-art<br/>massage chairs</h1>
-            <p>Explore our chairs and discover luxury and comfort of owning your massage chair.</p>
-            <a href="#chairs" className="btn">Get Started</a>
-          </div>
+          <h1 className="hero-title">Experience Ultimate Relaxation</h1>
+          <p className="hero-subtitle">Premium Massage Chairs for Your Wellness Journey</p>
+          <a href="#chairs" className="cta-button">Explore Our Collection</a>
         </div>
       </section>
 
-      {/* Chairs Gallery */}
-      <section id="chairs" className="chairs-section">
-        <h2 className="section-title">Find peace of mind with</h2>
-        <h2 className="section-title">Nanami Massage Chair</h2>
-        <p className="section-subtitle">Available units:</p>
-        
+      <section id="chairs" className="section">
+        <h2 className="section-title">Our Premium Collection</h2>
         <div className="chairs-grid">
-          {Object.keys(chairData).slice(0, 6).map((key) => (
+          {Object.entries(chairData).map(([key, chair]) => (
             <div key={key} className="chair-card" onClick={() => showChairDetails(key)}>
-              <div className="chair-image-container">
-                <img src={chairData[key].imageUrl} alt={chairData[key].name} className="chair-image" />
-              </div>
-              <p className="chair-name">{chairData[key].name}</p>
-            </div>
-          ))}
-        </div>
-        
-        <div className="dots">
-          <div className="dot"></div>
-          <div className="dot active"></div>
-          <div className="dot"></div>
-        </div>
-      </section>
-
-      {/* Chair Detail */}
-      <section className="chair-detail">
-        <div className="chair-detail-container">
-          {selectedChair ? (
-            <>
-              <img src={selectedChair.imageUrl} alt={selectedChair.name} className="chair-detail-image" />
-              <h2>{selectedChair.name}</h2>
-              <div className="price">{selectedChair.price}</div>
-              <div className="features">
-                <h3>Most advanced features:</h3>
-                <ul>
-                  {selectedChair.features.map((feature, index) => (
+              <img 
+                src={chair.imageUrl} 
+                alt={chair.name}
+                className="chair-image"
+                onError={(e) => {
+                  e.target.src = 'https://via.placeholder.com/300x300?text=Chair+Image';
+                }}
+              />
+              <div className="chair-info">
+                <h3 className="chair-name">{chair.name}</h3>
+                <p className="chair-price">{chair.price}</p>
+                <ul className="chair-features">
+                  {chair.features.slice(0, 3).map((feature, index) => (
                     <li key={index}>{feature}</li>
                   ))}
                 </ul>
               </div>
-              <div className="availability">
-                <p className="availability-label">AVAILABLE IN:</p>
-                <p className="availability-text">KORONADAL AND DAVAO CITY</p>
-              </div>
-            </>
-          ) : null}
+            </div>
+          ))}
+        </div>
+
+        {selectedChair && (
+          <div className="chair-detail">
+            <div className="detail-content">
+              <h2>{selectedChair.name}</h2>
+              <h3>{selectedChair.price}</h3>
+              <h4>Complete Features:</h4>
+              <ul className="chair-features">
+                {selectedChair.features.map((feature, index) => (
+                  <li key={index}>{feature}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
+      </section>
+
+      <section id="about" className="about-section">
+        <div className="about-content">
+          <h2 className="section-title">About NANAMI</h2>
+          <p style={{ fontSize: '1.2rem', lineHeight: '1.8', marginBottom: '1rem' }}>
+            At NANAMI, we believe in the power of relaxation and wellness. For over a decade, 
+            we've been providing premium massage chairs that combine cutting-edge technology 
+            with exceptional comfort.
+          </p>
+          <p style={{ fontSize: '1.2rem', lineHeight: '1.8' }}>
+            Our commitment is to help you achieve the perfect balance between work and wellness, 
+            one massage at a time.
+          </p>
         </div>
       </section>
 
-      {/* Locations */}
-      <section className="locations">
-        <div className="location-card location-red">
-          <div>
-            <h2>Koronadal<br/>Branch</h2>
-            <button className="location-btn btn-dark">Contact Us</button>
+      <section id="contact" className="contact-section section">
+        <h2 className="section-title">Get in Touch</h2>
+        <form className="contact-form">
+          <div className="form-group">
+            <label>Name</label>
+            <input type="text" placeholder="Your name" required />
           </div>
-        </div>
-        <div className="location-card location-map">
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6898.317492232694!2d124.84198959953399!3d6.493986169164506!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32f819b880061637%3A0x6291c93d217d22a!2sNanami%20Massage%20Chair!5e1!3m2!1sen!2sph!4v1759829724709!5m2!1sen!2sph" 
-            allowFullScreen="" 
-            loading="lazy" 
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Koronadal Branch Map"
-          />
-        </div>
-        
-        <div className="location-card location-map">
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4872.074718971728!2d125.5988036758185!3d7.064680416636251!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32f96d001d64509d%3A0xf80e99ab7943ea74!2sNanami%20Massage%20Chair-Davao!5e1!3m2!1sen!2sph!4v1759829699988!5m2!1sen!2sph" 
-            allowFullScreen="" 
-            loading="lazy" 
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Davao Branch Map"
-          />
-        </div>
-        <div className="location-card location-dark">
-          <div>
-            <h2>Davao<br/>Branch</h2>
-            <button className="location-btn btn-red">Contact Us</button>
+          <div className="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="your@email.com" required />
           </div>
-        </div>
-      </section>
-
-      {/* About */}
-      <section style={{
-        minHeight: '100vh',
-        background: aboutBackground,
-        display: 'flex',
-        alignItems: 'center',
-        padding: '5rem 2rem'
-      }} className="about">
-        <div className="about-container">
-          <h2>About the company</h2>
-          <div className="about-grid">
-            <div className="about-box">
-              <p>We specialize in offering state-of-the-art massage chairs that combine cutting-edge technology with affordability. Explore our chairs and discover the luxury and comfort of owning your massage chair.</p>
-            </div>
-            <div className="about-box about-box-purple">
-              <p>There are two branches: Koronadal and Davao City. Our main branch is in Koronadal City.</p>
-            </div>
+          <div className="form-group">
+            <label>Message</label>
+            <textarea rows="5" placeholder="Tell us what you're interested in..." required></textarea>
           </div>
-        </div>
-      </section>
-
-      {/* Contact */}
-      <section className="contact">
-        <div className="contact-container">
-          <div className="contact-info">
-            <h2>Get in touch</h2>
-            
-            <div className="contact-details">
-              <div className="contact-section">
-                <h3>Davao Branch</h3>
-                <p>JMC Building, Gen. Douglas MacArthur Hwy</p>
-                <p>Matina, Davao City</p>
-              </div>
-              
-              <div className="contact-section">
-                <h3>Koronadal Branch</h3>
-                <p>Purok 9, Blk 5 Lot 11, Assumption Road, Paraiso</p>
-                <p>Village, Koronadal, 9506 South Cotabato</p>
-              </div>
-              
-              <div className="contact-section">
-                <p>Tel. 0905 515 2703</p>
-                <p>Email: jmptradingmindanao@gmail.com</p>
-                <p>Facebook: <a href="https://www.facebook.com/NanamiMassageChair/" target="_blank" rel="noreferrer" style={{color: '#d1d5db', textDecoration: 'underline'}}>@NanamiMassageChair</a></p>
-              </div>
-              
-              <p className="accessibility">The office is wheelchair accessible.</p>
-            </div>
-            
-            <button className="location-btn btn-red">Call Us Today</button>
-          </div>
-          
-          <div className="contact-logo">
-            <div className="logo-circle">
-              <img src={imageUrls.logo} alt="Nanami Logo" />
-            </div>
-            <div className="company-name">NANAMI</div>
-          </div>
-        </div>
+          <button type="submit" className="submit-button">Send Message</button>
+        </form>
       </section>
     </div>
   );
 };
 
 export default NanamiWebsite;
-
-
-
-
