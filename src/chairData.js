@@ -2,7 +2,7 @@ export const chairData = {
   premium: {
     name: 'Premium',
     price: 'PHP 145,000',
-    imageUrl: 'https://your-s3-bucket.s3.amazonaws.com/premium.png',
+    imageUrl: 'https://nanami-massage-chair-images.s3.ap-southeast-2.amazonaws.com/premium.png',
     features: [
       'Advanced SL track system',
       '15 auto massage programs',
@@ -17,7 +17,7 @@ export const chairData = {
   premiumplus: {
     name: 'Premium Plus',
     price: 'PHP 150,000',
-    imageUrl: 'https://your-s3-bucket.s3.amazonaws.com/premium plus.png',
+    imageUrl: 'https://nanami-massage-chair-images.s3.ap-southeast-2.amazonaws.com/premium+plus.png',
     features: [
       'Enhanced SL track system',
       '18 auto massage programs',
@@ -33,7 +33,7 @@ export const chairData = {
   executive: {
     name: 'Executive',
     price: 'PHP 155,000',
-    imageUrl: 'https://your-s3-bucket.s3.amazonaws.com/executive.png',
+    imageUrl: 'https://nanami-massage-chair-images.s3.ap-southeast-2.amazonaws.com/executive.png',
     features: [
       'Longest SL track in the market',
       '20 auto massage programs',
@@ -49,7 +49,7 @@ export const chairData = {
   luxury: {
     name: 'Elite',
     price: 'PHP 165,000',
-    imageUrl: 'https://your-s3-bucket.s3.amazonaws.com/luxury.png',
+    imageUrl: 'https://nanami-massage-chair-images.s3.ap-southeast-2.amazonaws.com/luxury.png',
     features: [
       'Premium leather upholstery',
       '25 auto massage programs',
@@ -65,7 +65,7 @@ export const chairData = {
   elitepro: {
     name: 'Elite Pro',
     price: 'PHP 175,000',
-    imageUrl: 'https://your-s3-bucket.s3.amazonaws.com/elite pro.png',
+    imageUrl: 'https://nanami-massage-chair-images.s3.ap-southeast-2.amazonaws.com/elite+pro.png',
     features: [
       'Premium Italian leather',
       '30 auto massage programs',
@@ -82,7 +82,7 @@ export const chairData = {
   luxury1: {
     name: 'Luxury',
     price: 'PHP 185,000',
-    imageUrl: 'https://your-s3-bucket.s3.amazonaws.com/luxury1.png',
+    imageUrl: 'https://nanami-massage-chair-images.s3.ap-southeast-2.amazonaws.com/luxury1.png',
     features: [
       'Top-grain leather upholstery',
       '35 auto massage programs',
@@ -100,7 +100,7 @@ export const chairData = {
 };
 
 export const imageUrls = {
-  logo: 'https://your-s3-bucket.s3.amazonaws.com/logo.png',
-  hero: 'https://your-s3-bucket.s3.amazonaws.com/chairs.jpg',
-  blackchair: 'https://your-s3-bucket.s3.amazonaws.com/blackchair.jpg'
+  logo: 'https://nanami-massage-chair-images.s3.ap-southeast-2.amazonaws.com/logo.png',
+  hero: 'https://nanami-massage-chair-images.s3.ap-southeast-2.amazonaws.com/chairs.jpg',
+  blackchair: 'https://nanami-massage-chair-images.s3.ap-southeast-2.amazonaws.com/blackchair.jpg'
 };
