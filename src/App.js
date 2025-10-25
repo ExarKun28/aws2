@@ -251,59 +251,6 @@ const NanamiWebsite = () => {
             background: #f8f9fa;
           }
 
-          .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-          }
-
-          .form-group {
-            margin-bottom: 1.5rem;
-          }
-
-          .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-weight: 600;
-          }
-
-          .form-group input,
-          .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-          }
-
-          .form-group input:focus,
-          .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-          }
-
-          .submit-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-          }
-
-          .submit-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-          }
-
           .chair-detail {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -485,21 +432,118 @@ const NanamiWebsite = () => {
 
       <section id="contact" className="contact-section section">
         <h2 className="section-title">Get in Touch</h2>
-        <form className="contact-form">
-          <div className="form-group">
-            <label>Name</label>
-            <input type="text" placeholder="Your name" required />
+        <div style={{ 
+          display: 'flex', 
+          gap: '3rem', 
+          alignItems: 'center',
+          maxWidth: '1000px',
+          margin: '0 auto',
+          flexWrap: 'wrap'
+        }}>
+          {/* Contact Information */}
+          <div style={{ flex: '1', minWidth: '300px' }}>
+            <div style={{ marginBottom: '2rem' }}>
+              <h3 style={{ 
+                color: '#e74c3c', 
+                fontSize: '1.8rem', 
+                marginBottom: '1rem' 
+              }}>Davao Branch</h3>
+              <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#555' }}>
+                JMC Building, Gen. Douglas MacArthur Hwy<br />
+                Matina, Davao City
+              </p>
+            </div>
+
+            <div style={{ marginBottom: '2rem' }}>
+              <h3 style={{ 
+                color: '#e74c3c', 
+                fontSize: '1.8rem', 
+                marginBottom: '1rem' 
+              }}>Koronadal Branch</h3>
+              <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#555' }}>
+                Purok 9, Blk 5 Lot 11, Assumption Road, Paraiso<br />
+                Village, Koronadal, 9506 South Cotabato
+              </p>
+            </div>
+
+            <div style={{ marginBottom: '1rem' }}>
+              <p style={{ fontSize: '1.1rem', color: '#555' }}>
+                <strong>Tel:</strong> 0905 515 2703<br />
+                <strong>Email:</strong> jmptradingmtndanao@gmail.com<br />
+                <strong>Facebook:</strong> <a 
+                  href="https://facebook.com/NanamiMassageChair" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{ color: '#667eea', textDecoration: 'none' }}
+                >
+                  @NanamiMassageChair
+                </a>
+              </p>
+            </div>
+
+            <p style={{ 
+              fontSize: '0.95rem', 
+              fontStyle: 'italic', 
+              color: '#777',
+              marginTop: '1.5rem'
+            }}>
+              The office is wheelchair accessible.
+            </p>
+
+            <button 
+              style={{
+                background: '#e74c3c',
+                color: 'white',
+                padding: '1rem 2.5rem',
+                fontSize: '1.1rem',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                marginTop: '2rem',
+                fontWeight: '600',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseOver={(e) => e.target.style.background = '#c0392b'}
+              onMouseOut={(e) => e.target.style.background = '#e74c3c'}
+              onClick={() => window.location.href = 'tel:09055152703'}
+            >
+              CALL US TODAY
+            </button>
           </div>
-          <div className="form-group">
-            <label>Email</label>
-            <input type="email" placeholder="your@email.com" required />
+
+          {/* Logo */}
+          <div style={{ flex: '1', minWidth: '300px', textAlign: 'center' }}>
+            <div style={{
+              background: 'white',
+              padding: '3rem',
+              borderRadius: '15px',
+              boxShadow: '0 5px 15px rgba(0,0,0,0.1)'
+            }}>
+              <img 
+                src={imageUrls.logo}
+                alt="Nanami Logo"
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                  marginBottom: '1rem'
+                }}
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+              <h2 style={{
+                fontSize: '2.5rem',
+                fontWeight: '800',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                marginTop: '1rem'
+              }}>
+                NANAMI
+              </h2>
+            </div>
           </div>
-          <div className="form-group">
-            <label>Message</label>
-            <textarea rows="5" placeholder="Tell us what you're interested in..." required></textarea>
-          </div>
-          <button type="submit" className="submit-button">Send Message</button>
-        </form>
+        </div>
       </section>
     </div>
   );
