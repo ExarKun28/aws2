@@ -254,32 +254,9 @@ const NanamiWebsite = () => {
           .chair-detail {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 3rem 2rem;
-            margin-top: 2rem;
+            padding: 4rem 2rem;
+            margin-top: 3rem;
             border-radius: 15px;
-            animation: slideIn 0.5s ease-out;
-          }
-
-          @keyframes slideIn {
-            from {
-              opacity: 0;
-              transform: translateX(-20px);
-            }
-            to {
-              opacity: 1;
-              transform: translateX(0);
-            }
-          }
-
-          .detail-content {
-            max-width: 800px;
-            margin: 0 auto;
-          }
-
-          .detail-content h2,
-          .detail-content h3,
-          .detail-content h4 {
-            color: white;
             text-align: center;
           }
 
@@ -290,7 +267,8 @@ const NanamiWebsite = () => {
 
           .detail-content h3 {
             font-size: 2rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
           }
 
           .detail-content h4 {
@@ -511,7 +489,7 @@ const NanamiWebsite = () => {
             </button>
           </div>
 
-          {/* Logo */}
+          {/* Logo - UPDATED: Removed purple NANAMI text */}
           <div style={{ flex: '1', minWidth: '300px', textAlign: 'center' }}>
             <div style={{
               background: 'white',
@@ -524,23 +502,12 @@ const NanamiWebsite = () => {
                 alt="Nanami Logo"
                 style={{
                   maxWidth: '100%',
-                  height: 'auto',
-                  marginBottom: '1rem'
+                  height: 'auto'
                 }}
                 onError={(e) => {
                   e.target.style.display = 'none';
                 }}
               />
-              <h2 style={{
-                fontSize: '2.5rem',
-                fontWeight: '800',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                marginTop: '1rem'
-              }}>
-                NANAMI
-              </h2>
             </div>
           </div>
         </div>
