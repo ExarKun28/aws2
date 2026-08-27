@@ -1,41 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { imageUrls } from './chairData.js';
+import React, { useState } from 'react';
+import { imageUrls, chairsData } from './chairData.js';
 
 const NanamiWebsite = () => {
   const [selectedChair, setSelectedChair] = useState(null);
-  const [chairData, setChairData] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // Fetch chairs from API
-  useEffect(() => {
-    const fetchChairs = async () => {
-      try {
-        const response = await fetch('https://6up3q0a4gh.execute-api.ap-southeast-2.amazonaws.com/default/GetMassageChairs');
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch chairs');
-        }
-        
-        const data = await response.json();
-        
-        // Convert array to object format matching original structure
-        const chairsObject = {};
-        data.forEach(chair => {
-          chairsObject[chair.chairId] = chair;
-        });
-        
-        setChairData(chairsObject);
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching chairs:', err);
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-
-    fetchChairs();
-  }, []);
+  // Build the same object shape the old API response used to produce
+  const chairData = {};
+  chairsData.forEach(chair => {
+    chairData[chair.chairId] = chair;
+  });
 
   const showChairDetails = (chairType) => {
     setSelectedChair(chairData[chairType]);
@@ -46,37 +19,6 @@ const NanamiWebsite = () => {
 
   const heroBackground = imageUrls.hero ? `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${imageUrls.hero})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
   const aboutBackground = imageUrls.blackchair ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${imageUrls.blackchair})` : 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
-
-  if (loading) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        fontSize: '24px',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Canterra'
-      }}>
-        Loading massage chairs...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        fontSize: '24px',
-        color: 'red',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Canterra'
-      }}>
-        Error loading chairs: {error}
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -356,8 +298,8 @@ const NanamiWebsite = () => {
         <div className="chairs-grid">
           {Object.entries(chairData).map(([key, chair]) => (
             <div key={key} className="chair-card" onClick={() => showChairDetails(key)}>
-              <img 
-                src={chair.imageUrl} 
+              <img
+                src={chair.imageUrl}
                 alt={chair.name}
                 className="chair-image"
                 onError={(e) => {
@@ -397,12 +339,12 @@ const NanamiWebsite = () => {
         <div className="about-content">
           <h2 className="section-title">About NANAMI</h2>
           <p style={{ fontSize: '1.2rem', lineHeight: '1.8', marginBottom: '1rem' }}>
-            At NANAMI, we believe in the power of relaxation and wellness. For over a decade, 
-            we've been providing premium massage chairs that combine cutting-edge technology 
+            At NANAMI, we believe in the power of relaxation and wellness. For over a decade,
+            we've been providing premium massage chairs that combine cutting-edge technology
             with exceptional comfort.
           </p>
           <p style={{ fontSize: '1.2rem', lineHeight: '1.8' }}>
-            Our commitment is to help you achieve the perfect balance between work and wellness, 
+            Our commitment is to help you achieve the perfect balance between work and wellness,
             one massage at a time.
           </p>
         </div>
@@ -410,9 +352,9 @@ const NanamiWebsite = () => {
 
       <section id="contact" className="contact-section section">
         <h2 className="section-title">Get in Touch</h2>
-        <div style={{ 
-          display: 'flex', 
-          gap: '3rem', 
+        <div style={{
+          display: 'flex',
+          gap: '3rem',
           alignItems: 'center',
           maxWidth: '1000px',
           margin: '0 auto',
@@ -421,10 +363,10 @@ const NanamiWebsite = () => {
           {/* Contact Information */}
           <div style={{ flex: '1', minWidth: '300px' }}>
             <div style={{ marginBottom: '2rem' }}>
-              <h3 style={{ 
-                color: '#e74c3c', 
-                fontSize: '1.8rem', 
-                marginBottom: '1rem' 
+              <h3 style={{
+                color: '#e74c3c',
+                fontSize: '1.8rem',
+                marginBottom: '1rem'
               }}>Davao Branch</h3>
               <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#555' }}>
                 JMC Building, Gen. Douglas MacArthur Hwy<br />
@@ -433,10 +375,10 @@ const NanamiWebsite = () => {
             </div>
 
             <div style={{ marginBottom: '2rem' }}>
-              <h3 style={{ 
-                color: '#e74c3c', 
-                fontSize: '1.8rem', 
-                marginBottom: '1rem' 
+              <h3 style={{
+                color: '#e74c3c',
+                fontSize: '1.8rem',
+                marginBottom: '1rem'
               }}>Koronadal Branch</h3>
               <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#555' }}>
                 Purok 9, Blk 5 Lot 11, Assumption Road, Paraiso<br />
@@ -448,9 +390,9 @@ const NanamiWebsite = () => {
               <p style={{ fontSize: '1.1rem', color: '#555' }}>
                 <strong>Tel:</strong> 0905 515 2703<br />
                 <strong>Email:</strong> jmptradingmtndanao@gmail.com<br />
-                <strong>Facebook:</strong> <a 
-                  href="https://facebook.com/NanamiMassageChair" 
-                  target="_blank" 
+                <strong>Facebook:</strong> <a
+                  href="https://facebook.com/NanamiMassageChair"
+                  target="_blank"
                   rel="noopener noreferrer"
                   style={{ color: '#667eea', textDecoration: 'none' }}
                 >
@@ -459,16 +401,16 @@ const NanamiWebsite = () => {
               </p>
             </div>
 
-            <p style={{ 
-              fontSize: '0.95rem', 
-              fontStyle: 'italic', 
+            <p style={{
+              fontSize: '0.95rem',
+              fontStyle: 'italic',
               color: '#777',
               marginTop: '1.5rem'
             }}>
               The office is wheelchair accessible.
             </p>
 
-            <button 
+            <button
               style={{
                 background: '#e74c3c',
                 color: 'white',
@@ -489,7 +431,7 @@ const NanamiWebsite = () => {
             </button>
           </div>
 
-          {/* Logo - UPDATED: Removed purple NANAMI text */}
+          {/* Logo */}
           <div style={{ flex: '1', minWidth: '300px', textAlign: 'center' }}>
             <div style={{
               background: 'white',
@@ -497,7 +439,7 @@ const NanamiWebsite = () => {
               borderRadius: '15px',
               boxShadow: '0 5px 15px rgba(0,0,0,0.1)'
             }}>
-              <img 
+              <img
                 src={imageUrls.logo}
                 alt="Nanami Logo"
                 style={{
